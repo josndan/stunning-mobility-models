@@ -51,6 +51,8 @@ def get_data(step = 10,force_reload=False,num_users=92):
             df["Session_Entry"] = df.index
             min_ = df.index.min()
             df.index = df.index.map(lambda x: int(x-min_))
+            df["Location"] = df["Location"]-1
+            # df = df[df["Location"] != 2956]
             df.to_pickle(file_name)
         res.append(df)
     return res

@@ -1,4 +1,5 @@
 from hmmlearn import hmm
+import numpy as np
 
 class HMM:
     def __init__(self,type="MHMM",**kwargs):
@@ -6,20 +7,26 @@ class HMM:
             self.model = hmm.MultinomialHMM(**kwargs)
         elif type == "GHMM":
             self.model = hmm.GaussianHMM(**kwargs)
-    def train(self,X):
-        self.model.fit(X[:,None])
+    def train(self,X,lookback=5):
+        # size = X.shape[0]
+        # con_X = np.concatenate(X)
+        # lengths = [lookback] * (size//lookback)
+        # print(X.shape,len(lengths))
+        self.seen = list(set(np.squeeze(X)))
+        self.model.fit(X)
     
     def predict(self,X,possible_loc=None):
-        if possible_loc is None:
-            possible_loc = np.asarray(2956)
         prediction = []
         for seq in X:
             m = float("-inf")
             m_pred = None
-            for p in possible_loc:
-                t = np.concatenate((seq,np.asarray[p])) 
-                s = self.model.score(t)
-                if s > m:
+            for p in self.seen:
+                t = np.concatenate((seq,np.asarray([p]))) 
+                l = seq.shape[0] + 1
+                # print(t.reshape(l,1))
+                s = self.model.score(t.reshape(l,1))
+                # print(s)
+                if s >= m:
                     m = s
                     m_pred = p
             prediction.append(m_pred)
@@ -67,7 +74,8 @@ class Metrics:
         return np.asarray(res).mean()
 
     def accuracy(self, y_predict, y):
-        return self.multi_class(y_predict, y, self.accuracy_two_class)
+        total_correct = y[y == y_predict].shape[0]
+        return total_correct/y.shape[0]
 
     def recall(self, y_predict, y):
         return self.multi_class(y_predict, y, self.recall_two_class)
