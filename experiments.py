@@ -8,7 +8,7 @@ from hmm import *
 def experiment(x):
   evaluator = Metrics()
   n_components = [1,3,5,10,20,30]
-  split_ratios =[0.8] #[0.1,0.3,0.5,0.8,0.9]
+  split_ratios =[0.1] #[0.1,0.3,0.5,0.8,0.9]
   lookbacks = [5] #[1,5,10,,15,20]
   m_accuracies = []
   m_recalls = []
