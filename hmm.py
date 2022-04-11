@@ -1,5 +1,6 @@
 from hmmlearn import hmm
 import numpy as np
+import random
 
 class HMM:
     def __init__(self,type="MHMM",**kwargs):
@@ -12,7 +13,8 @@ class HMM:
         # con_X = np.concatenate(X)
         # lengths = [lookback] * (size//lookback)
         # print(X.shape,len(lengths))
-        self.seen = list(set(np.squeeze(X)))
+        self.seen = list(set(np.ravel(X)))
+        self.seen_set = set(self.seen)
         self.model.fit(X)
     
     def predict(self,X,possible_loc=None):
@@ -20,15 +22,18 @@ class HMM:
         for seq in X:
             m = float("-inf")
             m_pred = None
-            for p in self.seen:
-                t = np.concatenate((seq,np.asarray([p]))) 
-                l = seq.shape[0] + 1
-                # print(t.reshape(l,1))
-                s = self.model.score(t.reshape(l,1))
-                # print(s)
-                if s >= m:
-                    m = s
-                    m_pred = p
+            if set(seq) <= self.seen_set:
+                for p in self.seen:
+                    t = np.concatenate((seq,np.asarray([p]))) 
+                    l = seq.shape[0] + 1
+                    # print(t.reshape(l,1)) 
+                    s = self.model.score(t.reshape(l,1))
+                    # print(s)
+                    if s >= m:
+                        m = s
+                        m_pred = p
+            else:
+                m_pred = self.seen[random.randint(0,len(self.seen)-1)]
             prediction.append(m_pred)
         return np.asarray(prediction) 
 
@@ -71,7 +76,7 @@ class Metrics:
                 temp = metric(self.make_pos(y_predict, val), self.make_pos(y, val))
                 res.append(temp)
 
-        return np.asarray(res).mean()
+        return np.ma.masked_invalid(np.asarray(res)).mean()
 
     def accuracy(self, y_predict, y):
         total_correct = y[y == y_predict].shape[0]

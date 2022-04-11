@@ -1,10 +1,14 @@
 import pandas as pd
 import numpy as np
 
-def get_data(step = 10,force_reload=False,num_users=92):
+def get_data(step = 10,force_reload=False,num_users=92,fill_missing_data= False):
     res = []
     for i in range(num_users):
-        file_name = f"./data/user{i+1}_pickled"
+        file_name = ""
+        if fill_missing_data:
+            file_name = f"./data/user{i+1}_pickled_filled"
+        else:
+            file_name = f"./data/user{i+1}_pickled"
         df = None
         try :
             if force_reload:
@@ -33,6 +37,8 @@ def get_data(step = 10,force_reload=False,num_users=92):
                 return row
 
             df[["Session_Entry","day_of_week"]] = df[["Session_Entry","day_of_week"]].apply(discretize,axis=1)
+            if fill_missing_data:
+                df.drop('day_of_week', axis=1, inplace=True)
             df.drop('day_of_week', axis=1, inplace=True)
             original_df = df.copy()
 
@@ -51,8 +57,11 @@ def get_data(step = 10,force_reload=False,num_users=92):
             df["Session_Entry"] = df.index
             min_ = df.index.min()
             df.index = df.index.map(lambda x: int(x-min_))
-            df["Location"] = df["Location"]-1
-            # df = df[df["Location"] != 2956]
+            df["Location"] = df["Location"]-1 #to map the locations from 0 - 2956
+            if not fill_missing_data:
+                df = df[df["Location"] != 2956]
+            
+            df = df[df["Location"] != 2956]
             df.to_pickle(file_name)
         res.append(df)
     return res
