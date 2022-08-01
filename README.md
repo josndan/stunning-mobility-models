@@ -28,4 +28,4 @@ The following model were on mobility data
 |     SVM     |     44.89%    |
 
 
-Traditional ML models are atleast as good as deep learning models such as LSTM for given mobility data.
+Traditional ML models are atleast as good as deep learning models such as LSTM for the given mobility data.
