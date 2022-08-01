@@ -1,17 +1,19 @@
 # stunning-mobility-models
 
 Worked with Akanksha Atrey and Mariem Snoussi to evaluate the effectiveness of traditional Machine Learning Models for Mobility prediction.
-
+<br>
 Prior work on personalized mobility modeling has focused on using Markov models and LSTMs. Identifying the effectiveness of different time-series modeling methods (e.g., hidden Markov models) for personalized mobility prediction can provide relevant insights for building robust personalized ML models. 
 
 This project was done to evaluate the following hypothesis:
+
 *Deep learning approaches for personalized mobility modeling are less effective than traditional ML methods.*
-
+<br>
 The following model were on mobility data 
-**HMM 
-Naive Bayes
-Logistic Regression**
 
+HMM 
+Naive Bayes
+Logistic Regression
+<br>
 # Results:
 
 |    Method   | Test accuracy |
