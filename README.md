@@ -18,7 +18,7 @@ The following model were on mobility data
 - Logistic Regression
 
 
-# Results:
+## Results:
 
 |    Method   | Test accuracy |
 |:-----------:|:-------------:|
