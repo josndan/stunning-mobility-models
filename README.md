@@ -29,3 +29,4 @@ The following model were on mobility data
 
 
 Traditional ML models are atleast as good as deep learning models such as LSTM for the given mobility data.
+
